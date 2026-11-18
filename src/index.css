@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-brand-wine: #581825;
+  --color-brand-ivory: #FAF8F5;
+  --color-brand-border: #E7DFD5;
+}
+
+body {
+  margin: 0;
+  background-color: #FAF8F5;
+  color: #221F20;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Restrained, elegant typography classes */
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8CEBE;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B6A694;
+}
