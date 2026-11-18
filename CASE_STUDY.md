@@ -1,4 +1,4 @@
-# Ocean and Origin: Studio Engine
+# Ocean and Origin — Invoicing, Agreement & Quote Suite
 ## High-Performance Quoting, Vector Agreement Orchestration & Milestone Financials for Luxury Creative Studios
 
 **Author & System Architect:** Yashank D  
@@ -14,7 +14,7 @@
 
 ```
        ┌────────────────────────────────────────────────────────┐
-       │             OCEAN AND ORIGIN: STUDIO ENGINE            │
+       │     OCEAN AND ORIGIN: INVOICE & AGREEMENT SUITE        │
        │    Autonomous Quoting, Vector Contracts & GST Billing  │
        └────────────────────────────────────────────────────────┘
 ```
@@ -27,13 +27,13 @@ High-end creative studios (cinematography, luxury weddings, commercial productio
 - Payment milestones (Advance, Post-Shoot, Final Delivery) are tracked informally via WhatsApp and fragmented bank apps.
 - PDF generation is slow, blurry, and traps browser scroll wheels in nested iframe containers.
 
-**Ocean and Origin: Studio Engine** was conceived, architected, and engineered to eliminate this operational friction. It provides a unified, desktop-first web application that bridges **dynamic Markdown pricing catalogs**, **progressive contract drafting**, **isolated vector PDF generation**, and **bidirectional milestone invoice synchronization** into a seamless, type-safe workflow.
+**Ocean and Origin: Invoice, Agreement & Quote Suite** was conceived, architected, and engineered to eliminate this operational friction. It provides a unified, desktop-first web application that bridges **dynamic Markdown pricing catalogs**, **progressive contract drafting**, **isolated vector PDF generation**, and **bidirectional milestone invoice synchronization** into a seamless, type-safe workflow.
 
 ---
 
 ## 2. The Operational Problem Matrix
 
-| Problem Area | Legacy Studio Friction | Studio Engine Solution |
+| Problem Area | Legacy Studio Friction | Invoice, Agreement & Quote Solution |
 | :--- | :--- | :--- |
 | **Quoting Velocity** | 3 to 4 hours spent customizing PDF rate cards and typing WhatsApp pitches manually. | **Real-Time Markdown Catalog:** Edit rates in plain Markdown (`Prices.md`); app instantly auto-calculates tiers and generates 1-click formatted WhatsApp pitches. |
 | **Financial Reconciliation** | Contract terms frequently drift from final tax invoices; manual GST math creates reconciliation chaos. | **Bidirectional Commercial Ledger:** `invoiceSync.ts` guarantees 100% mathematical consistency between contract fee schedules and GST tax invoices. |
@@ -147,7 +147,7 @@ Yet our commercial pipeline was leaking time and cashflow:
 ❌ Copy-pasting legal clauses and accidentally omitting crucial copyright or drone indemnity terms.
 ❌ Clunky web PDF previewers that hijacked the browser scroll wheel and froze client calls.
 
-So I architected and built the OCEAN AND ORIGIN: STUDIO ENGINE.
+So I architected and built the OCEAN AND ORIGIN: INVOICE, AGREEMENT & QUOTE SUITE.
 
 Here is the engineering breakdown of how it works:
 
@@ -182,8 +182,8 @@ Check out the full interactive presentation deck and GitHub repository in the co
 
 ### Slide 1: Cover Slide
 - **Headline:** How We Replaced 4 Hours of Client Paperwork with a 60-Second Vector Engine
-- **Sub-headline:** The Architecture Behind Ocean and Origin: Studio Engine
-- **Visual Cue:** Studio Engine Logo + Sleek Dark UI Mockup of the Dashboard
+- **Sub-headline:** The Architecture Behind Ocean and Origin: Invoice, Agreement & Quoting Suite
+- **Visual Cue:** Ocean and Origin Logo + Sleek Dark UI Mockup of the Document Dashboard
 - **Footer:** Slide 1 / 10 • Yashank D (Founder & Architect)
 
 ---
@@ -280,11 +280,11 @@ Check out the full interactive presentation deck and GitHub repository in the co
 
 ---
 
-### Slide 10: Conclusion & Candidate Profile
+### Slide 10: Conclusion & Architect Profile
 - **Headline:** Engineering High-Taste, High-Resilience Systems
 - **Author:** Yashank D
 - **Role:** Founder & Software Architect
 - **Contact:** yashank.design@gmail.com
-- **Core Competencies:** Systems Architecture • React 18 & TypeScript • UI/UX Ergonomics • Financial Logic
-- **Call to Action:** View Interactive Deck at `public/presentation.html` | GitHub: `github.com/Yashank-d`
-- **Footer:** Slide 10 / 10 • Connect & Collaborate
+- **Core Competencies:** Systems Architecture • React 18 & TypeScript • UI/UX Ergonomics • Commercial & Legal Logic
+- **Project Links:** Interactive Deck at `public/presentation.html` | GitHub: `github.com/Yashank-d`
+- **Footer:** Slide 10 / 10 • Architecture & Engineering Craft
