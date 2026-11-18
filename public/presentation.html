@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocean and Origin: Studio Engine — Architecture & Portfolio Deck</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              wine: '#581825',
+              crimson: '#8B2635',
+              gold: '#D4AF37',
+              sand: '#EAE3D9',
+              bgDark: '#0B0B0E',
+              surface: '#121217',
+              card: '#181820',
+              border: '#272732',
+              muted: '#9494A8'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Print stylesheet for 1-click PDF Deck Export */
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+    @media print {
+      body {
+        background: #0B0B0E !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide-container {
+        display: block !important;
+        height: auto !important;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        min-height: 100vh !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        opacity: 1 !important;
+        position: relative !important;
+        transform: none !important;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #121217;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #272732;
+      border-radius: 3px;
+    }
+
+    .slide {
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.hidden {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      transform: scale(0.98);
+      display: none;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      transform: scale(1);
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0B0E] text-[#EDEDED] font-sans antialiased h-screen w-screen overflow-hidden select-none flex flex-col justify-between">
+
+  <!-- Top Navigation & Presentation Meta Bar -->
+  <header class="no-print h-16 border-b border-[#272732] bg-[#121217]/90 backdrop-blur-md px-6 flex items-center justify-between z-30 shrink-0">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2.5">
+        <span class="w-3 h-3 rounded-full bg-gradient-to-tr from-[#8B2635] to-[#D4AF37]"></span>
+        <span class="font-display font-bold tracking-tight text-white text-base">OCEAN &amp; ORIGIN</span>
+        <span class="text-xs font-mono uppercase px-2 py-0.5 rounded bg-[#1F1F2A] border border-[#323242] text-brand-gold">STUDIO ENGINE</span>
+      </div>
+      <div class="hidden md:flex items-center gap-2 border-l border-[#272732] pl-4 text-xs text-brand-muted">
+        <span>Portfolio Presentation &amp; Case Study</span>
+        <span>•</span>
+        <span class="text-[#EDEDED] font-medium">Yashank D (Founder &amp; Architect)</span>
+      </div>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-3">
+      <!-- Slide Counter -->
+      <div class="font-mono text-xs px-3 py-1.5 rounded-lg bg-[#181820] border border-[#272732] text-white">
+        <span id="slide-current" class="text-brand-gold font-bold">1</span>
+        <span class="text-brand-muted"> / </span>
+        <span id="slide-total" class="text-brand-muted">10</span>
+      </div>
+
+      <!-- Export PDF Button -->
+      <button onclick="window.print()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#1F1F2A] hover:bg-[#2A2A38] border border-[#323242] text-xs font-medium text-white transition-all">
+        <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <span>Export PDF Deck</span>
+      </button>
+
+      <!-- App Link -->
+      <a href="/" target="_blank" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#581825] to-[#8B2635] hover:opacity-90 text-xs font-medium text-white transition-all shadow-sm">
+        <span>Open App Demo</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Slide Canvas Container -->
+  <main class="slide-container flex-1 relative overflow-hidden flex items-center justify-center p-4 lg:p-8">
+
+    <!-- SLIDE 1: Title & Executive Summary -->
+    <section class="slide active w-full h-full max-w-7xl flex flex-col justify-between" data-slide="1">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181820] border border-[#2B2B38] text-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-mono text-brand-gold tracking-wide uppercase">System Architecture &amp; Case Study</span>
+          </div>
+
+          <div class="space-y-3">
+            <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-white leading-tight">
+              Ocean and Origin <br>
+              <span class="bg-gradient-to-r from-white via-[#EAE3D9] to-brand-gold bg-clip-text text-transparent">Studio Engine</span>
+            </h1>
+            <p class="text-lg text-brand-muted font-normal leading-relaxed">
+              An enterprise-grade document orchestration system automating dynamic markdown quoting, legally binding vector agreement generation, and milestone-linked billing for luxury creative studios.
+            </p>
+          </div>
+
+          <!-- Feature badges -->
+          <div class="grid grid-cols-3 gap-3 pt-2">
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="text-xs font-mono text-brand-muted uppercase">Turnaround</div>
+              <div class="text-xl font-display font-bold text-white mt-1">4h &rarr; 60s</div>
+              <div class="text-[11px] text-emerald-400 mt-0.5">88% Time Saved</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="text-xs font-mono text-brand-muted uppercase">Architecture</div>
+              <div class="text-xl font-display font-bold text-white mt-1">Vector PDF</div>
+              <div class="text-[11px] text-brand-gold mt-0.5">Zero-Server WebWorker</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="text-xs font-mono text-brand-muted uppercase">Persistence</div>
+              <div class="text-xl font-display font-bold text-white mt-1">Turso + IDB</div>
+              <div class="text-[11px] text-blue-400 mt-0.5">Edge Cloud &amp; Offline</div>
+            </div>
+          </div>
+
+          <!-- Author Info Card -->
+          <div class="p-4 rounded-xl bg-gradient-to-r from-[#181822] to-[#14141A] border border-[#272736] flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#581825] to-[#8B2635] border border-[#A23749] flex items-center justify-center font-display font-bold text-white text-sm">
+                YD
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-white">Yashank D</div>
+                <div class="text-xs text-brand-gold">Founder &amp; Architect</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <a href="mailto:yashank.design@gmail.com" class="text-xs font-mono text-brand-muted hover:text-white transition-colors">
+                yashank.design@gmail.com
+              </a>
+              <div class="text-[11px] text-emerald-400 font-medium">Bangalore, Karnataka</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Hero Preview -->
+        <div class="lg:col-span-6 relative">
+          <div class="relative rounded-2xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B] group">
+            <div class="h-8 bg-[#181824] border-b border-[#2B2B3C] px-3.5 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></span>
+              <span class="ml-2 text-[10px] font-mono text-brand-muted">app.oceanandorigin.com &bull; telemetry dashboard</span>
+            </div>
+            <img src="./portfolio_assets/01_dashboard.png" alt="Dashboard Hub" class="w-full h-auto object-cover transform group-hover:scale-[1.01] transition-transform duration-500">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Problem Matrix & The Creative Agency Dilemma -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="2">
+      <div class="space-y-6 flex-1">
+        <div class="flex items-center justify-between border-b border-[#22222E] pb-4">
+          <div>
+            <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">01 // Problem Identification</div>
+            <h2 class="text-3xl font-display font-bold text-white mt-1">The High-End Studio Bottleneck</h2>
+          </div>
+          <div class="text-xs font-mono px-3 py-1 rounded bg-[#181822] text-brand-muted border border-[#272736]">
+            Operational Friction Matrix
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Problem 1 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-red-500/20 hover:border-red-500/40 transition-colors space-y-3">
+            <div class="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-mono text-sm font-bold">
+              01
+            </div>
+            <h3 class="font-display font-bold text-white text-base">Scattered Quoting Workflows</h3>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Sales leads received quotes handcrafted in Canva or Word. Inconsistent pricing, manual math errors, and zero catalog governance cost ~4 hours per inquiry.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-red-400">Impact: 35% Deal Velocity Loss</div>
+          </div>
+
+          <!-- Problem 2 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-amber-500/20 hover:border-amber-500/40 transition-colors space-y-3">
+            <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 font-mono text-sm font-bold">
+              02
+            </div>
+            <h3 class="font-display font-bold text-white text-base">Milestone Revenue Leakage</h3>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              25% advance, 60% shoot day, and 15% final delivery payments were tracked informally across WhatsApp chats and banking apps, risking missed collections.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-amber-400">Impact: Delayed Cashflow Cycles</div>
+          </div>
+
+          <!-- Problem 3 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-purple-500/20 hover:border-purple-500/40 transition-colors space-y-3">
+            <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 font-mono text-sm font-bold">
+              03
+            </div>
+            <h3 class="font-display font-bold text-white text-base">Legal Compliance Vulnerability</h3>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              8 crucial clauses (copyright ownership, drone permissions, cancellation indemnities, overtime rates) were routinely omitted or worded loosely.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-purple-400">Impact: Unbounded Client Liability</div>
+          </div>
+
+          <!-- Problem 4 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-blue-500/20 hover:border-blue-500/40 transition-colors space-y-3">
+            <div class="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-mono text-sm font-bold">
+              04
+            </div>
+            <h3 class="font-display font-bold text-white text-base">Nested Scroll &amp; Preview Trapping</h3>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Standard web PDF previewers hijack the browser scroll wheel, causing page stutter, jumpy zooming, and frustration during live executive contract sign-offs.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-blue-400">Impact: High Dropoff in Client Review</div>
+          </div>
+        </div>
+
+        <!-- Solution Banner -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-[#181824] via-[#1E1A22] to-[#181824] border border-[#2E2838] flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <span class="text-sm font-semibold text-white">The Studio Engine Mandate</span>
+            <span class="text-xs text-brand-muted hidden sm:inline">&mdash; Unify Quoting, Vector Drafting, Milestones, and Cloud Synchronization into an integrated desktop-first web suite.</span>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">Full System Response &rarr;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: System Architecture & Technical Pipeline -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="3">
+      <div class="space-y-6 flex-1">
+        <div class="flex items-center justify-between border-b border-[#22222E] pb-4">
+          <div>
+            <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">02 // System Architecture</div>
+            <h2 class="text-3xl font-display font-bold text-white mt-1">End-to-End Orchestration Pipeline</h2>
+          </div>
+          <div class="text-xs font-mono px-3 py-1 rounded bg-[#181822] text-brand-muted border border-[#272736]">
+            React 18 &bull; LibSQL Turso &bull; React-PDF
+          </div>
+        </div>
+
+        <!-- Architecture Flowchart -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <!-- Layer 1 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-[#252533] space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-brand-gold font-bold">STAGE 01</span>
+              <span class="text-brand-muted">Ingestion</span>
+            </div>
+            <h4 class="font-display font-bold text-white text-base">Markdown Pricing Engine</h4>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Parses <code class="text-emerald-300 font-mono text-[11px]">Prices.md</code> into structured brand tiers, services, deliverables, and add-on catalogs with schema validation.
+            </p>
+            <div class="p-2.5 rounded bg-[#0E0E14] border border-[#1E1E2A] text-[11px] font-mono text-[#A8A8C0]">
+              &bull; Regex Tokenizer<br>
+              &bull; Brand Switching<br>
+              &bull; Real-time AST Parser
+            </div>
+          </div>
+
+          <!-- Layer 2 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-[#252533] space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-brand-gold font-bold">STAGE 02</span>
+              <span class="text-brand-muted">State Sync</span>
+            </div>
+            <h4 class="font-display font-bold text-white text-base">Unified Document Context</h4>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Bidirectional state bridge keeping Client Booking, Legal Clauses, and Milestone Invoices 100% reconciled in memory.
+            </p>
+            <div class="p-2.5 rounded bg-[#0E0E14] border border-[#1E1E2A] text-[11px] font-mono text-[#A8A8C0]">
+              &bull; invoiceSync.ts Engine<br>
+              &bull; Milestone Autocalc<br>
+              &bull; GSTIN State Validation
+            </div>
+          </div>
+
+          <!-- Layer 3 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-[#252533] space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-brand-gold font-bold">STAGE 03</span>
+              <span class="text-brand-muted">Compilation</span>
+            </div>
+            <h4 class="font-display font-bold text-white text-base">Client-Side PDF Vector Core</h4>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Pure client-side WebWorker compiling vector PDFs at 300 DPI with embedded custom fonts, SVG logos, and zero server roundtrips.
+            </p>
+            <div class="p-2.5 rounded bg-[#0E0E14] border border-[#1E1E2A] text-[11px] font-mono text-[#A8A8C0]">
+              &bull; @react-pdf/renderer<br>
+              &bull; Plus Jakarta typography<br>
+              &bull; Instant Blob URL Stream
+            </div>
+          </div>
+
+          <!-- Layer 4 -->
+          <div class="p-5 rounded-xl bg-[#14141B] border border-[#252533] space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-brand-gold font-bold">STAGE 04</span>
+              <span class="text-brand-muted">Persistence</span>
+            </div>
+            <h4 class="font-display font-bold text-white text-base">Hybrid Edge + Local DB</h4>
+            <p class="text-xs text-brand-muted leading-relaxed">
+              Primary cloud sync to Turso LibSQL distributed edge nodes with automatic offline fallback to IndexedDB.
+            </p>
+            <div class="p-2.5 rounded bg-[#0E0E14] border border-[#1E1E2A] text-[11px] font-mono text-[#A8A8C0]">
+              &bull; LibSQL Client<br>
+              &bull; Zero-Offline Interruption<br>
+              &bull; Client Folder Grouping
+            </div>
+          </div>
+        </div>
+
+        <!-- Tech Stack Pill Row -->
+        <div class="flex flex-wrap items-center gap-2 pt-2">
+          <span class="text-xs font-mono text-brand-muted mr-2">Core Technologies:</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">React 18.3</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">TypeScript 5.7</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">Vite 6</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">Tailwind CSS</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">Turso (LibSQL)</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">@react-pdf/renderer</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#181822] border border-[#2C2C3C] text-xs font-mono text-white">Playwright Automation</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Feature Deep Dive: Markdown Quoting & Pricing Engine -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">03 // Feature Deep Dive</div>
+          <h2 class="text-3xl font-display font-bold text-white">
+            Real-Time Quoting &amp; Markdown Rates Engine
+          </h2>
+          <p class="text-sm text-brand-muted leading-relaxed">
+            Eliminates static quote preparation. Studio operators configure rates in clean Markdown (<code class="text-white font-mono text-xs">Prices.md</code>) which dynamically powers a live quote builder with brand switching, package toggling, and instant pitch generation.
+          </p>
+
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-[#14141B] border border-[#232330]">
+              <div class="w-6 h-6 rounded bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">&check;</div>
+              <div>
+                <div class="text-xs font-bold text-white">Live Markdown Rate Parser &amp; Editor</div>
+                <div class="text-[11px] text-brand-muted">In-app modal enables immediate rate revisions without redeploying code.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-[#14141B] border border-[#232330]">
+              <div class="w-6 h-6 rounded bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">&check;</div>
+              <div>
+                <div class="text-xs font-bold text-white">Multi-Brand Identity Switcher</div>
+                <div class="text-[11px] text-brand-muted">Seamlessly toggles between "House of Parva", "Ocean and Origin", and boutique sub-brands.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-[#14141B] border border-[#232330]">
+              <div class="w-6 h-6 rounded bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">&check;</div>
+              <div>
+                <div class="text-xs font-bold text-white">1-Click WhatsApp Pitch Generator</div>
+                <div class="text-[11px] text-brand-muted">Formats structured, beautifully punctuated client messages with bold deliverables ready to paste.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B]">
+            <div class="h-7 bg-[#181824] border-b border-[#2B2B3C] px-3 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-brand-muted">Quote Generator &bull; Interactive Catalog &bull; Retinal Capture</span>
+              <span class="text-[10px] font-mono text-emerald-400">STATUS: ACTIVE</span>
+            </div>
+            <img src="./portfolio_assets/02_quote_engine.png" alt="Quote Engine" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Feature Deep Dive: Progressive Booking Workspace -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">04 // Feature Deep Dive</div>
+          <h2 class="text-3xl font-display font-bold text-white">
+            Progressive Booking &amp; Deliverables Matrix
+          </h2>
+          <p class="text-sm text-brand-muted leading-relaxed">
+            Replaces bloated contract forms with an ergonomic 4-stage progressive disclosure stepper. Captures high-complexity event telemetry without cognitive overload.
+          </p>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 rounded-lg bg-[#14141B] border border-[#22222E]">
+              <div class="text-[11px] font-mono text-brand-gold">STAGE 1</div>
+              <div class="text-xs font-bold text-white mt-1">Client Telemetry</div>
+              <div class="text-[11px] text-brand-muted mt-0.5">Multi-day dates, venues, key coordinator contacts.</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[#14141B] border border-[#22222E]">
+              <div class="text-[11px] font-mono text-brand-gold">STAGE 2</div>
+              <div class="text-xs font-bold text-white mt-1">Creative Matrix</div>
+              <div class="text-[11px] text-brand-muted mt-0.5">Cinematography, candid coverage, aerial drone units.</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[#14141B] border border-[#22222E]">
+              <div class="text-[11px] font-mono text-brand-gold">STAGE 3</div>
+              <div class="text-xs font-bold text-white mt-1">Commercial Ledger</div>
+              <div class="text-[11px] text-brand-muted mt-0.5">Milestone schedule, GST, wiring instructions.</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[#14141B] border border-[#22222E]">
+              <div class="text-[11px] font-mono text-brand-gold">STAGE 4</div>
+              <div class="text-xs font-bold text-white mt-1">Review &amp; Export</div>
+              <div class="text-[11px] text-brand-muted mt-0.5">Isolated vector scroll review &amp; instant PDF download.</div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[#14141B] border border-[#272736] text-xs font-mono text-brand-muted flex items-center justify-between">
+            <span>Validation Engine: Real-time inline field linting</span>
+            <span class="text-emerald-400 font-bold">100% Type-Safe</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B]">
+            <div class="h-7 bg-[#181824] border-b border-[#2B2B3C] px-3 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-brand-muted">Services Matrix &bull; High Resolution Telemetry</span>
+              <span class="text-[10px] font-mono text-blue-400">STEP 2 OF 4</span>
+            </div>
+            <img src="./portfolio_assets/04_services_matrix.png" alt="Services Matrix" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Feature Deep Dive: Commercial Ledger & Milestone Sync -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">05 // Feature Deep Dive</div>
+          <h2 class="text-3xl font-display font-bold text-white">
+            Bidirectional Commercial Ledger &amp; GST Sync
+          </h2>
+          <p class="text-sm text-brand-muted leading-relaxed">
+            Eliminates financial discrepancies between contract agreements and formal billing. Whenever commercial terms change, the system synchronizes invoice line items, tax brackets, and payment milestones automatically.
+          </p>
+
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#232330] space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">3-Stage Milestone Automation</span>
+                <span class="font-mono text-brand-gold font-bold">25% &bull; 60% &bull; 15%</span>
+              </div>
+              <p class="text-[11px] text-brand-muted">Advance deposit on booking signing, shoot completion balance, and final album/RAW deliverable release tranche.</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#232330] space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Indian GST Split Engine</span>
+                <span class="font-mono text-emerald-400 font-bold">CGST + SGST / IGST</span>
+              </div>
+              <p class="text-[11px] text-brand-muted">Detects interstate vs intrastate transactions with automated 18% tax calculation and formal legal invoice formatting.</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#232330] space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Bank Wiring &amp; UPI QR Generation</span>
+                <span class="font-mono text-white font-bold">ICICI &bull; Kotak</span>
+              </div>
+              <p class="text-[11px] text-brand-muted">Pre-configures verified Ocean and Origin corporate banking details with direct NEFT/RTGS and instant UPI settlement coordinates.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B]">
+            <div class="h-7 bg-[#181824] border-b border-[#2B2B3C] px-3 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-brand-muted">Commercial Ledger &bull; Milestone Payment Tracker</span>
+              <span class="text-[10px] font-mono text-emerald-400">INR LOCALIZED</span>
+            </div>
+            <img src="./portfolio_assets/05_commercial_ledger.png" alt="Commercial Ledger" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Feature Deep Dive: Vector PDF & Isolated Scroll Architecture -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="7">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">06 // Technical Deep Dive</div>
+          <h2 class="text-3xl font-display font-bold text-white">
+            Vector PDF Engine &amp; Isolated Scroll Architecture
+          </h2>
+          <p class="text-sm text-brand-muted leading-relaxed">
+            Solved two major UX challenges in contract software: nested scroll wheel trapping and blurry rasterized document previews.
+          </p>
+
+          <div class="space-y-3">
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">INNOVATION 01</div>
+              <h4 class="text-sm font-bold text-white">Isolated Scroll Decoupling</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                Separated the outer viewport scroll container from the internal PDF canvas scroll container using CSS <code class="text-white font-mono">overscroll-behavior: contain</code> and dedicated wheel event traps. The parent web app never stutters or jumps when the user examines multi-page contract terms.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">INNOVATION 02</div>
+              <h4 class="text-sm font-bold text-white">Tri-Document Live Generation</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                One click generates 3 distinct, production-ready legal artifacts:
+                <br>&bull; <strong class="text-white">Master Agreement:</strong> 8 legal clauses, signatures, and schedule of rights.
+                <br>&bull; <strong class="text-white">Booking Schedule:</strong> Call sheet, crew allocation, and shot list.
+                <br>&bull; <strong class="text-white">Tax Invoice:</strong> Compliant GST milestone tax invoice.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B]">
+            <div class="h-7 bg-[#181824] border-b border-[#2B2B3C] px-3 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-brand-muted">Agreement Review &bull; Isolated Split View</span>
+              <span class="text-[10px] font-mono text-brand-gold">VECTOR 300 DPI</span>
+            </div>
+            <img src="./portfolio_assets/06_agreement_preview.png" alt="Agreement Preview" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Feature Deep Dive: Document Hub & Edge Persistence -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">07 // Feature Deep Dive</div>
+          <h2 class="text-3xl font-display font-bold text-white">
+            Document Repository &amp; Cloud Edge Persistence
+          </h2>
+          <p class="text-sm text-brand-muted leading-relaxed">
+            High-end studios manage dozens of active wedding seasons and multi-day shoots simultaneously. The Document Hub provides instantaneous grouping, search, and dual-layer persistence.
+          </p>
+
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Automated Client Grouping</span>
+                <span class="text-xs font-mono text-brand-gold">Folder Hierarchy</span>
+              </div>
+              <p class="text-[11px] text-brand-muted mt-1">Aggregates quotes, signed agreements, itineraries, and invoices under a unified client folder with date badges.</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Turso LibSQL Edge Database</span>
+                <span class="text-xs font-mono text-emerald-400">Sub-10ms Reads</span>
+              </div>
+              <p class="text-[11px] text-brand-muted mt-1">Syncs encrypted JSON document trees across distributed SQLite edge replicas with zero administrative overhead.</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#14141B] border border-[#22222E]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Zero-Offline IndexedDB Fallback</span>
+                <span class="text-xs font-mono text-blue-400">Offline First</span>
+              </div>
+              <p class="text-[11px] text-brand-muted mt-1">Allows producers on location without Wi-Fi to create contracts, draft amendments, and generate PDFs with zero connectivity loss.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden border border-[#2B2B3C] shadow-2xl bg-[#14141B]">
+            <div class="h-7 bg-[#181824] border-b border-[#2B2B3C] px-3 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-brand-muted">Document Archive &bull; Turso Cloud Telemetry</span>
+              <span class="text-[10px] font-mono text-emerald-400">EDGE SYNCED</span>
+            </div>
+            <img src="./portfolio_assets/09_document_hub.png" alt="Document Hub" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Business Impact, Metrics & Operational Velocity -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="9">
+      <div class="space-y-6 flex-1">
+        <div class="flex items-center justify-between border-b border-[#22222E] pb-4">
+          <div>
+            <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">08 // Business Impact &amp; Metrics</div>
+            <h2 class="text-3xl font-display font-bold text-white mt-1">Quantifiable Operational Impact</h2>
+          </div>
+          <div class="text-xs font-mono px-3 py-1 rounded bg-[#181822] text-brand-muted border border-[#272736]">
+            Production Telemetry
+          </div>
+        </div>
+
+        <!-- 4 Big Metric Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-6 rounded-2xl bg-[#14141B] border border-[#272736] relative overflow-hidden">
+            <div class="text-xs font-mono text-brand-muted uppercase">Turnaround Acceleration</div>
+            <div class="text-4xl lg:text-5xl font-display font-bold text-white mt-2">88%</div>
+            <div class="text-xs text-emerald-400 mt-2 font-medium">From ~4 hours to &lt;60 seconds</div>
+            <p class="text-[11px] text-brand-muted mt-2">Instant client onboarding removes sales friction during initial consultation calls.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#14141B] border border-[#272736] relative overflow-hidden">
+            <div class="text-xs font-mono text-brand-muted uppercase">Reconciliation Errors</div>
+            <div class="text-4xl lg:text-5xl font-display font-bold text-emerald-400 mt-2">0%</div>
+            <div class="text-xs text-white mt-2 font-medium">Zero contract &bull; invoice drift</div>
+            <p class="text-[11px] text-brand-muted mt-2">Synchronized commercial ledger eliminates tax calculation and milestone errors.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#14141B] border border-[#272736] relative overflow-hidden">
+            <div class="text-xs font-mono text-brand-muted uppercase">Render Pipeline Latency</div>
+            <div class="text-4xl lg:text-5xl font-display font-bold text-brand-gold mt-2">0 ms</div>
+            <div class="text-xs text-white mt-2 font-medium">Zero server roundtrip overhead</div>
+            <p class="text-[11px] text-brand-muted mt-2">100% client-side WebWorker vector generation ensures lightning-fast downloads.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#14141B] border border-[#272736] relative overflow-hidden">
+            <div class="text-xs font-mono text-brand-muted uppercase">Milestone Cashflow Recovery</div>
+            <div class="text-4xl lg:text-5xl font-display font-bold text-white mt-2">100%</div>
+            <div class="text-xs text-emerald-400 mt-2 font-medium">On-time milestone collection</div>
+            <p class="text-[11px] text-brand-muted mt-2">Structured 25/60/15 milestone schedules built directly into every client contract.</p>
+          </div>
+        </div>
+
+        <!-- Qualitative Testimonial / Architecture Note -->
+        <div class="p-5 rounded-2xl bg-[#14141B] border border-[#252535] grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-8 space-y-2">
+            <div class="text-xs font-mono text-brand-gold font-bold">PRODUCTION TESTIMONY // ARCHITECT'S NOTE</div>
+            <p class="text-sm text-[#D8D8E5] leading-relaxed italic">
+              "By eliminating manual document assembly and standardizing our legal, financial, and quoting operations, Studio Engine transformed Ocean and Origin into a high-velocity, legally bulletproof creative operation. Our clients experience immediate luxury polish from their very first proposal."
+            </p>
+          </div>
+          <div class="lg:col-span-4 border-l border-[#272736] pl-6 space-y-1">
+            <div class="text-sm font-bold text-white">Yashank D</div>
+            <div class="text-xs text-brand-gold">Founder &amp; Architect &bull; Ocean and Origin</div>
+            <div class="text-[11px] font-mono text-brand-muted">Bangalore, Karnataka</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: Author Competencies, Architecture Philosophy & Contact -->
+    <section class="slide hidden w-full h-full max-w-7xl flex flex-col justify-between" data-slide="10">
+      <div class="space-y-6 flex-1">
+        <div class="flex items-center justify-between border-b border-[#22222E] pb-4">
+          <div>
+            <div class="text-xs font-mono text-brand-gold uppercase tracking-wider">09 // Candidate Profile &amp; Competencies</div>
+            <h2 class="text-3xl font-display font-bold text-white mt-1">Architect Profile &amp; Engineering Craft</h2>
+          </div>
+          <div class="text-xs font-mono px-3 py-1 rounded bg-[#181822] text-brand-muted border border-[#272736]">
+            Full-Stack &bull; Product Design &bull; Systems
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Profile Card -->
+          <div class="lg:col-span-5 p-6 rounded-2xl bg-[#14141B] border border-[#272736] space-y-5">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#581825] to-[#8B2635] border-2 border-[#A23749] flex items-center justify-center font-display font-bold text-2xl text-white shadow-lg">
+                YD
+              </div>
+              <div>
+                <h3 class="text-xl font-display font-bold text-white">Yashank D</h3>
+                <p class="text-xs font-mono text-brand-gold font-medium">Founder &amp; Software Architect</p>
+                <p class="text-xs text-brand-muted mt-0.5">Product Design &amp; Systems Engineering</p>
+              </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-[#232330] text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-brand-muted">Direct Email:</span>
+                <a href="mailto:yashank.design@gmail.com" class="font-mono text-white hover:text-brand-gold transition-colors">yashank.design@gmail.com</a>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-brand-muted">Location:</span>
+                <span class="text-white">Bangalore, Karnataka (India)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-brand-muted">Project Repository:</span>
+                <a href="https://github.com/Yashank-d/OceanAndOriginInvoiceAndAgreements" target="_blank" class="font-mono text-emerald-400 hover:underline">github.com/Yashank-d</a>
+              </div>
+            </div>
+
+            <!-- Focus areas -->
+            <div class="space-y-2 pt-2 border-t border-[#232330]">
+              <div class="text-[11px] font-mono text-brand-muted uppercase">Design &amp; Engineering Philosophy:</div>
+              <p class="text-xs text-[#B4B4C8] leading-relaxed">
+                "Great software bridges high-taste design with resilient systems architecture. Every interaction must feel intentional, instantaneous, and mission-critical."
+              </p>
+            </div>
+          </div>
+
+          <!-- 4 Competency Pillar Cards -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">PILLAR 01</div>
+              <h4 class="text-sm font-bold text-white">Systems Architecture</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                Designing deterministic state machines, bidirectional state synchronization, and hybrid edge/local storage topologies with zero data loss.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">PILLAR 02</div>
+              <h4 class="text-sm font-bold text-white">Product &amp; UI/UX Craft</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                Meticulous layout design, typography hierarchy (Plus Jakarta Sans, Space Grotesk), isolated scroll containers, and zero layout shift ergonomics.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">PILLAR 03</div>
+              <h4 class="text-sm font-bold text-white">Performance &amp; WebWorkers</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                Client-side 300 DPI vector PDF compilation, AST markdown parsing, and sub-10ms UI interaction responsiveness.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#14141B] border border-[#252535] space-y-2">
+              <div class="text-xs font-mono text-brand-gold font-bold">PILLAR 04</div>
+              <h4 class="text-sm font-bold text-white">Commercial Velocity</h4>
+              <p class="text-xs text-brand-muted leading-relaxed">
+                Deep understanding of agency finance, milestone cashflows, Indian tax compliance (GST), and high-ticket sales psychology.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Closing Banner -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-[#581825] to-[#8B2635] text-white flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-sm font-semibold">Available for Founding Engineering &bull; Lead Product Architecture Roles</span>
+          </div>
+          <a href="mailto:yashank.design@gmail.com" class="px-4 py-1.5 rounded-lg bg-white text-[#581825] font-bold text-xs hover:bg-[#FAF8F5] transition-colors">
+            Get In Touch &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation & Slide Controls Bar -->
+  <footer class="no-print h-16 border-t border-[#272732] bg-[#121217]/90 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-30">
+    <div class="flex items-center gap-2">
+      <!-- Prev Button -->
+      <button id="prev-btn" class="p-2 rounded-lg bg-[#181822] hover:bg-[#232330] border border-[#2B2B3A] text-brand-muted hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+
+      <!-- Next Button -->
+      <button id="next-btn" class="p-2 rounded-lg bg-[#181822] hover:bg-[#232330] border border-[#2B2B3A] text-brand-muted hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <!-- Keyboard tip -->
+      <span class="hidden sm:inline text-[11px] font-mono text-brand-muted ml-3">
+        Use <kbd class="px-1.5 py-0.5 rounded bg-[#1C1C26] border border-[#2E2E3E] text-white">←</kbd> <kbd class="px-1.5 py-0.5 rounded bg-[#1C1C26] border border-[#2E2E3E] text-white">→</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-[#1C1C26] border border-[#2E2E3E] text-white">Space</kbd> to navigate
+      </span>
+    </div>
+
+    <!-- Progress Dots -->
+    <div id="progress-dots" class="flex items-center gap-2">
+      <!-- Generated via JS -->
+    </div>
+
+    <!-- Fullscreen & Mode Toggles -->
+    <div class="flex items-center gap-2">
+      <button id="fullscreen-btn" class="p-2 rounded-lg bg-[#181822] hover:bg-[#232330] border border-[#2B2B3A] text-brand-muted hover:text-white transition-all" title="Toggle Fullscreen (F)">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Slide Navigation Script -->
+  <script>
+    (function() {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const totalSlides = slides.length;
+      let currentIndex = 0;
+
+      const currentDisplay = document.getElementById('slide-current');
+      const totalDisplay = document.getElementById('slide-total');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const dotsContainer = document.getElementById('progress-dots');
+      const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+      totalDisplay.textContent = totalSlides;
+
+      // Render Dots
+      slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === 0 ? 'bg-brand-gold w-6' : 'bg-[#2A2A38] hover:bg-[#3E3E50]'}`;
+        dot.setAttribute('title', `Go to slide ${idx + 1}`);
+        dot.addEventListener('click', () => goToSlide(idx));
+        dotsContainer.appendChild(dot);
+      });
+
+      function updateSlide(newIndex) {
+        if (newIndex < 0 || newIndex >= totalSlides) return;
+
+        slides[currentIndex].classList.remove('active');
+        slides[currentIndex].classList.add('hidden');
+
+        currentIndex = newIndex;
+
+        slides[currentIndex].classList.remove('hidden');
+        slides[currentIndex].classList.add('active');
+
+        // Update displays
+        currentDisplay.textContent = currentIndex + 1;
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === totalSlides - 1;
+
+        // Update dots
+        const dots = dotsContainer.children;
+        Array.from(dots).forEach((dot, idx) => {
+          if (idx === currentIndex) {
+            dot.className = 'w-6 h-2.5 rounded-full bg-brand-gold transition-all duration-300';
+          } else {
+            dot.className = 'w-2.5 h-2.5 rounded-full bg-[#2A2A38] hover:bg-[#3E3E50] transition-all duration-300';
+          }
+        });
+      }
+
+      function goToSlide(idx) {
+        updateSlide(idx);
+      }
+
+      function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+          updateSlide(currentIndex + 1);
+        }
+      }
+
+      function prevSlide() {
+        if (currentIndex > 0) {
+          updateSlide(currentIndex - 1);
+        }
+      }
+
+      prevBtn.addEventListener('click', prevSlide);
+      nextBtn.addEventListener('click', nextSlide);
+
+      // Keyboard Controls
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowRight', 'PageDown', ' '].includes(e.key)) {
+          e.preventDefault();
+          nextSlide();
+        } else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          goToSlide(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+        } else if (e.key === 'f' || e.key === 'F') {
+          toggleFullScreen();
+        } else if (e.key >= '1' && e.key <= '9') {
+          const num = parseInt(e.key, 10);
+          if (num <= totalSlides) goToSlide(num - 1);
+        } else if (e.key === '0') {
+          goToSlide(9);
+        }
+      });
+
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => console.log(err));
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+
+      fullscreenBtn.addEventListener('click', toggleFullScreen);
+    })();
+  </script>
+</body>
+</html>

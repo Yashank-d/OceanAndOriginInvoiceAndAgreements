@@ -4,6 +4,11 @@ An editorial-grade commercial document generation suite and quoting engine built
 
 Generates print-ready vector PDFs, interactive client agreements, production booking schedules, commercial invoices, and instant estimates from a unified client data model.
 
+> **Portfolio Deck & Case Study:**
+> - 🖥️ **Interactive Presentation Deck:** Open [`public/presentation.html`](./public/presentation.html) in your browser (or visit `http://localhost:3000/presentation.html`).
+> - 📄 **Comprehensive Case Study & LinkedIn Carousel:** Read [`CASE_STUDY.md`](./CASE_STUDY.md).
+> - 👤 **Author & Architect:** Yashank D &bull; Founder & Architect &bull; [yashank.design@gmail.com](mailto:yashank.design@gmail.com)
+
 ---
 
 ## ✨ Features & Modules
